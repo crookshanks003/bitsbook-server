@@ -1,0 +1,44 @@
+{
+    "name": "bitsbook-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./dist/index.js",
+    "scripts": {
+        "build": "tsc --build",
+        "watch": "tsc -w",
+        "dev": "concurrently \"npm:watch\" \"nodemon ./dist/index.js\"",
+        "start": "node ./dist/index.js",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --max-warnings=0",
+        "*.json": "prettier --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/crookshanks003/bitsbook-server.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/crookshanks003/bitsbook-server/issues"
+    },
+    "homepage": "https://github.com/crookshanks003/bitsbook-server#readme",
+    "devDependencies": {
+        "@types/node": "^18.13.0",
+        "@typescript-eslint/eslint-plugin": "^5.52.0",
+        "@typescript-eslint/parser": "^5.52.0",
+        "concurrently": "^7.6.0",
+        "eslint": "^8.34.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.3",
+        "lint-staged": "^13.1.2",
+        "nodemon": "^2.0.20",
+        "prettier": "^2.8.4",
+        "typescript": "^4.9.5"
+    }
+}
