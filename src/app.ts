@@ -1,6 +1,8 @@
 import express from 'express';
 import helmet from 'helmet';
 import { httpLogger } from './middleware';
+import { globalErrorHandler } from './middleware/error';
+import router from './router';
 
 export function createApp() {
     const app = express();
@@ -14,6 +16,10 @@ export function createApp() {
     app.use('/health', (_, res) => {
         res.status(200).send('health: OK!');
     });
+
+    app.use(router);
+
+    app.use(globalErrorHandler);
 
     return app;
 }
