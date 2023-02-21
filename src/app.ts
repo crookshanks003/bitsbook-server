@@ -21,5 +21,8 @@ export function createApp() {
 
     app.use(globalErrorHandler);
 
+    console.log("Hello world");
+
+
     return app;
 }
