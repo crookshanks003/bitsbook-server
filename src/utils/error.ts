@@ -31,13 +31,21 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-    constructor(message: string, statusCode: number, meta: ErrorMeta = { tags: [] }) {
+    constructor(
+        message: string,
+        statusCode: number,
+        meta: ErrorMeta = { tags: [] },
+    ) {
         super(AppErrorName.Validation, message, statusCode, meta);
     }
 }
 
 export class DatabaseError extends AppError {
-    constructor(message: string, statusCode: number, meta: ErrorMeta = { tags: [] }) {
+    constructor(
+        message: string,
+        statusCode: number,
+        meta: ErrorMeta = { tags: [] },
+    ) {
         super(AppErrorName.Database, message, statusCode, meta);
     }
 }

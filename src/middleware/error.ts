@@ -3,7 +3,12 @@ import { AppError } from 'src/utils/error';
 import { logger } from '../utils/logger';
 import { Error } from '../utils/response';
 
-export const globalErrorHandler: ErrorRequestHandler = (err: AppError, req, res, _) => {
+export const globalErrorHandler: ErrorRequestHandler = (
+    err: AppError,
+    req,
+    res,
+    _,
+) => {
     logger.error(`${err.name}: ${err.message}`, {
         method: req.method,
         url: req.originalUrl,

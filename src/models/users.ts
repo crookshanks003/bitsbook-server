@@ -1,25 +1,22 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { User, Role } from '../types/user';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<User>({
     name: String,
-    studentID: String,
     email: String,
+    password: String,
+    createdAt: Date,
+    updatedAt: Date,
     role: {
         type: String,
-        enum: ['admin', 'user', 'club_admin'],
+        enum: Role,
     },
     clubs: [
         {
-            clubID: String,
-            name: String,
-            role: {
-                type: String,
-                enum: ['member', 'club_admin'],
-            },
+            clubID: { type: Schema.Types.ObjectId, ref: 'clubs' },
+            role: String,
         },
     ],
 });
 
-export const User = mongoose.model('users', userSchema);
-
-module.exports = User;
+export const UserModel = mongoose.model<User>('users', userSchema);
