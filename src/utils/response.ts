@@ -6,7 +6,7 @@ interface Response {
     message: string;
 }
 
-export function Normal(message: string, payload: any): Response {
+export function Normal(message: string, payload?: any): Response {
     return {
         time: Number(new Date()),
         message,
@@ -15,12 +15,13 @@ export function Normal(message: string, payload: any): Response {
 }
 
 export function Error(message: string, err: AppError): Response {
+    const { error: _, ...meta } = err.meta;
     return {
         time: Number(new Date()),
         message,
         payload: {
             message: err.message,
-            meta: err.meta,
+            meta: meta,
         },
     };
 }
