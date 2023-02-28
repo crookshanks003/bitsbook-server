@@ -11,12 +11,11 @@ export async function connectDB() {
 //execute multiple queries in a transaction
 export async function execTransaction(...queries: Query<any, any>[]) {
     const session = await mongoose.startSession();
-    session.startTransaction();
     try {
-        await Promise.all(queries.map((query) => query.session(session).exec()));
-        await session.commitTransaction();
+        await session.withTransaction(() =>
+            Promise.all(queries.map((query) => query.session(session))),
+        );
     } catch (error) {
-        await session.abortTransaction();
         throw error;
     } finally {
         session.endSession();
