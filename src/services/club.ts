@@ -49,6 +49,18 @@ class ClubService {
             });
         }
     }
+
+    async deleteClub(clubId: string) {
+        try {
+            await ClubModel.findByIdAndRemove(clubId);
+        } catch (error) {
+            throw new DatabaseError('Could not delete club', 500, {
+                error,
+                tags: ['deleteClub'],
+            });
+        }
+    }
+
     async addMemberToClub({ clubId, role, userId }: UpdateClubMemberDto) {
         try {
             const club: UserClub = { clubId, role };

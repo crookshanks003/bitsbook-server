@@ -149,6 +149,24 @@ class AdminController {
             next(error);
         }
     }
+
+    async deleteClub(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+            const club = await clubService.getClubWithId(id);
+            if (!club) {
+                throw new UserError(`Club with id ${id} does not exist`, 400, {
+                    tags: ['deleteClub'],
+                });
+            }
+            await clubService.deleteClub(id);
+            res.status(200).json(Normal('Club deleted'));
+        } catch (error) {
+            if (!error.meta) error.meta = { tags: [] };
+            error.meta.tags.push('admin');
+            next(error);
+        }
+    }
 }
 
 const adminController = new AdminController();

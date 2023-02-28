@@ -22,5 +22,6 @@ router.post(
     validateBody(UpdateClubMemberDto),
     adminController.removeClubMember,
 );
+router.post('/delete-club/:id', adminController.deleteClub);
 
 export default router;
