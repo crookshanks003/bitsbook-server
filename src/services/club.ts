@@ -1,7 +1,9 @@
 import { DatabaseError } from '../utils/error';
-import { ClubModel } from '../models';
 import { Club } from '../types/club';
-import { CreateClubDto } from '../types/dto/club';
+import { CreateClubDto, UpdateClubDto } from '../types/dto/club';
+import { ClubUser, UserClub } from '../types/club';
+import { ClubModel, execTransaction, UserModel } from '../models';
+import { UpdateClubMemberDto } from '../types/dto/user';
 import config from '../config';
 import bcrypt from 'bcrypt';
 
@@ -13,6 +15,17 @@ class ClubService {
             throw new DatabaseError('Could not find club', 500, {
                 error,
                 tags: ['getClubWithId'],
+            });
+        }
+    }
+
+    async updateClub(clubId: string, updateObject: UpdateClubDto) {
+        try {
+            await ClubModel.updateOne({ _id: clubId }, updateObject);
+        } catch (error) {
+            throw new DatabaseError('Could not update club', 500, {
+                error,
+                tags: ['updateClub'],
             });
         }
     }
@@ -33,6 +46,33 @@ class ClubService {
             throw new DatabaseError('Could not create club', 500, {
                 error,
                 tags: ['createClub'],
+            });
+        }
+    }
+    async addMemberToClub({ clubId, role, userId }: UpdateClubMemberDto) {
+        try {
+            const club: UserClub = { clubId, role };
+            const q1 = UserModel.updateOne({ _id: userId }, { $push: { clubs: club } });
+            const clubMember: ClubUser = { userId, role };
+            const q2 = ClubModel.updateOne({ _id: clubId }, { $push: { members: clubMember } });
+            await execTransaction(q1, q2);
+        } catch (error) {
+            throw new DatabaseError('Could not update user clubs', 500, {
+                error,
+                tags: ['addMemberToClub'],
+            });
+        }
+    }
+
+    async removeMemberFromClub({ clubId, userId }: UpdateClubMemberDto) {
+        try {
+            const q1 = UserModel.updateOne({ _id: userId }, { $pull: { clubs: { clubId } } });
+            const q2 = ClubModel.updateOne({ _id: clubId }, { $pull: { members: { userId } } });
+            await execTransaction(q1, q2);
+        } catch (error) {
+            throw new DatabaseError('Could not remove member from club', 500, {
+                error,
+                tags: ['removeMemberFromClub'],
             });
         }
     }

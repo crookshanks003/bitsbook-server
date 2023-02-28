@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { Normal } from '../utils/response';
 import { clubService, userService } from '../services';
-import { CreateUserDto, UpdateUserClubDto, UpdateUserRoleDto } from '../types/dto/user';
+import { CreateUserDto, UpdateClubMemberDto, UpdateUserRoleDto } from '../types/dto/user';
 import { UserError } from '../utils/error';
-import { CreateClubDto } from '../types/dto/club';
+import { CreateClubDto, UpdateClubDto } from '../types/dto/club';
 
 class AdminController {
     async deleteUser(req: Request, res: Response, next: NextFunction) {
@@ -54,9 +54,9 @@ class AdminController {
         }
     }
 
-    async addUserToClub(req: Request, res: Response, next: NextFunction) {
+    async addClubMember(req: Request, res: Response, next: NextFunction) {
         try {
-            const dto: UpdateUserClubDto = req.body;
+            const dto: UpdateClubMemberDto = req.body;
             const user = await userService.getUserWithId(dto.userId);
             if (!user) {
                 throw new UserError(`User with id ${dto.userId} does not exist`, 400, {
@@ -79,7 +79,7 @@ class AdminController {
                 });
             }
 
-            await userService.addUserToClubs(dto);
+            await clubService.addMemberToClub(dto);
             res.status(200).json(Normal('Updated clubs for user'));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };
@@ -102,7 +102,50 @@ class AdminController {
             res.status(201).json(Normal('Club created', newClub));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };
-            error.tags.push('admin');
+            error.meta.tags.push('admin');
+            next(error);
+        }
+    }
+
+    async updateClub(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+            const dto: UpdateClubDto = req.body;
+            const club = await clubService.getClubWithId(id);
+            if (!club) {
+                throw new UserError(`Club with id ${id} does not exist`, 400, {
+                    tags: ['updateClub'],
+                });
+            }
+            await clubService.updateClub(id, dto);
+            res.status(200).json(Normal('Club updated', dto));
+        } catch (error) {
+            if (!error.meta) error.meta = { tags: [] };
+            error.meta.tags.push('admin');
+            next(error);
+        }
+    }
+
+    async removeClubMember(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dto: UpdateClubMemberDto = req.body;
+            const user = await userService.getUserWithId(dto.userId);
+            if (!user) {
+                throw new UserError(`User with id ${dto.userId} does not exist`, 400, {
+                    tags: ['removeUserFromClub'],
+                });
+            }
+            const club = await clubService.getClubWithId(dto.clubId);
+            if (!club) {
+                throw new UserError(`Club with id ${dto.clubId} does not exist`, 400, {
+                    tags: ['removeUserFromClub'],
+                });
+            }
+            await clubService.removeMemberFromClub(dto);
+            res.status(200).json(Normal('Removed member from club'));
+        } catch (error) {
+            if (!error.meta) error.meta = { tags: [] };
+            error.meta.tags.push('admin');
             next(error);
         }
     }

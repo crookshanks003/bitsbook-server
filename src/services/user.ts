@@ -1,10 +1,9 @@
 import { DatabaseError } from '../utils/error';
-import { ClubModel, execTransaction, UserModel } from '../models';
-import { CreateUserDto, UpdateUserClubDto, UpdateUserRoleDto } from '../types/dto/user';
+import { UserModel } from '../models';
+import { CreateUserDto, UpdateUserRoleDto } from '../types/dto/user';
 import bcrypt from 'bcrypt';
 import config from '../config';
 import { User } from '../types/user';
-import { ClubUser, UserClub } from '../types/club';
 
 class UserService {
     async deleteUser(id: string) {
@@ -45,21 +44,6 @@ class UserService {
             throw new DatabaseError('Could not update user role', 500, {
                 error,
                 tags: ['updateUserRole'],
-            });
-        }
-    }
-
-    async addUserToClubs({ clubId, role, userId }: UpdateUserClubDto) {
-        try {
-            const club: UserClub = { clubId, role };
-            const q1 = UserModel.updateOne({ _id: userId }, { $push: { clubs: club } });
-            const clubMember: ClubUser = { userId, role };
-            const q2 = ClubModel.updateOne({ _id: clubId }, { $push: { members: clubMember } });
-            await execTransaction(q1, q2);
-        } catch (error) {
-            throw new DatabaseError('Could not update user clubs', 500, {
-                error,
-                tags: ['updateUserClubs'],
             });
         }
     }
