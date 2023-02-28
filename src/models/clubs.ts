@@ -9,7 +9,7 @@ const clubSchema = new mongoose.Schema<Club>({
     createdAt: Date,
     members: [
         {
-            userID: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+            userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
             role: String,
         },
     ],

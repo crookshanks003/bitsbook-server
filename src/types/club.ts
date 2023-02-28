@@ -1,16 +1,16 @@
-import { Types } from 'mongoose';
+import { Types, Document } from 'mongoose';
 
 export interface UserClub {
-    clubID: Types.ObjectId;
+    clubId: string;
     role: string;
 }
 
 export interface ClubUser {
-    userID: Types.ObjectId;
+    userId: string;
     role: string;
 }
 
-export interface Club {
+export interface Club extends Document {
     _id: Types.ObjectId;
     name: string;
     userName: string;

@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema<User>({
     },
     clubs: [
         {
-            clubID: { type: Schema.Types.ObjectId, ref: 'clubs' },
+            clubId: { type: Schema.Types.ObjectId, ref: 'clubs' },
             role: String,
         },
     ],

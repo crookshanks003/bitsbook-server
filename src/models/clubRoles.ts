@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 const clubRolesSchema = new mongoose.Schema({
-    clubID: {
+    clubId: {
         type: Schema.Types.ObjectId,
         ref: 'clubs',
     },

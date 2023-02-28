@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Query } from 'mongoose';
 import config from '../config';
 
 export async function connectDB() {
@@ -6,6 +6,21 @@ export async function connectDB() {
 
     mongoose.set('strictQuery', false);
     await mongoose.connect(uri, { family: 4 });
+}
+
+//execute multiple queries in a transaction
+export async function execTransaction(...queries: Query<any, any>[]) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        await Promise.all(queries.map((query) => query.session(session).exec()));
+        await session.commitTransaction();
+    } catch (error) {
+        await session.abortTransaction();
+        throw error;
+    } finally {
+        session.endSession();
+    }
 }
 
 export * from './users';

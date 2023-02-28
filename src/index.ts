@@ -1,7 +1,7 @@
+import 'reflect-metadata';
 import { connectDB } from './models';
 import { createApp } from './app';
 import config from './config';
-import 'reflect-metadata';
 
 function main() {
     connectDB()

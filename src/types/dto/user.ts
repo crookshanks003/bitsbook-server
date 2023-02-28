@@ -1,5 +1,5 @@
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
-import { Role } from '../../types/user';
+import { IsEmail, IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
+import { Role } from '../user';
 
 export class CreateUserDto {
     @IsString()
@@ -15,4 +15,26 @@ export class CreateUserDto {
     @IsString()
     @IsEnum(Role)
     role: Role;
+}
+
+export class UpdateUserRoleDto {
+    @IsString()
+    userId: string;
+
+    @IsString()
+    @IsEnum(Role)
+    role: Role;
+}
+
+export class UpdateUserClubDto {
+    @IsString()
+    @IsNotEmpty()
+    userId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    clubId: string;
+
+    @IsString()
+    role: string;
 }
