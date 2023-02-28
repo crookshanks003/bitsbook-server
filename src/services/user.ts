@@ -17,6 +17,17 @@ class UserService {
         }
     }
 
+    async getAllUsers() {
+        try {
+            return await UserModel.find();
+        } catch (error) {
+            throw new DatabaseError('Could not get all users', 500, {
+                error,
+                tags: ['getAllUsers'],
+            });
+        }
+    }
+
     async createUser({ email, password, name, role }: CreateUserDto): Promise<User> {
         try {
             const hash = bcrypt.hash(password, config.BCRYPT_SALT_ROUNDS);
