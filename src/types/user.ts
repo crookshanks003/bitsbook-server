@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Types, Document } from 'mongoose';
 import { UserClub } from './club';
 
 export enum Role {
@@ -6,7 +6,7 @@ export enum Role {
     USER = 'user',
 }
 
-export interface User {
+export interface User extends Document {
     _id: Types.ObjectId;
     name: string;
     email: string;

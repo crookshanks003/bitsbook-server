@@ -1,5 +1,9 @@
-import { DatabaseError, UserError } from '../utils/error';
+import { DatabaseError } from '../utils/error';
 import { UserModel } from '../models';
+import { CreateUserDto } from '../types/dto/user';
+import bcrypt from 'bcrypt';
+import config from '../config';
+import { User } from '../types/user';
 
 class AdminService {
     async deleteUser(id: string) {
@@ -13,20 +17,18 @@ class AdminService {
         }
     }
 
-    async createUser(email: string, password: string, name: string, role: string) {
+    async createUser({ email, password, name, role }: CreateUserDto): Promise<User> {
         try {
-            const user = await this.getUserWithEmail(email);
-            if (user) {
-                throw new UserError('User already exists', 400, { tags: ['admin', 'createUser'] });
-            }
+            const hash = bcrypt.hash(password, config.BCRYPT_SALT_ROUNDS);
+            const newUser = new UserModel();
+            newUser.email = email;
+            newUser.name = name;
+            newUser.role = role;
+            newUser.password = await hash;
+            newUser.createdAt = new Date();
+            newUser.updatedAt = new Date();
 
-            const newUser = new UserModel({
-                email,
-                password,
-                name,
-                role,
-            });
-            await newUser.save();
+            return newUser.save();
         } catch (error) {
             throw new DatabaseError('Could not create user', 500, {
                 error,
@@ -35,7 +37,7 @@ class AdminService {
         }
     }
 
-    private getUserWithEmail(email: string) {
+    getUserWithEmail(email: string) {
         return UserModel.findOne({ email });
     }
 }
