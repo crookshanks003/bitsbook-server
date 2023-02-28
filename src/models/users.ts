@@ -4,7 +4,7 @@ import { User, Role } from '../types/user';
 const userSchema = new mongoose.Schema<User>({
     name: String,
     email: String,
-    password: String,
+    password: { type: String, select: false },
     createdAt: Date,
     updatedAt: Date,
     role: {

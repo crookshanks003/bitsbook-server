@@ -19,6 +19,17 @@ class ClubService {
         }
     }
 
+    async getAllClubs() {
+        try {
+            return await ClubModel.find();
+        } catch (error) {
+            throw new DatabaseError('Could not find clubs', 500, {
+                error,
+                tags: ['getAllClubs'],
+            });
+        }
+    }
+
     async updateClub(clubId: string, updateObject: UpdateClubDto) {
         try {
             await ClubModel.updateOne({ _id: clubId }, updateObject);

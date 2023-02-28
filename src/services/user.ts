@@ -80,6 +80,17 @@ class UserService {
             });
         }
     }
+
+    async getPopulatedUser(id: string) {
+        try {
+            return await UserModel.findById(id).populate('clubs.clubId');
+        } catch (err) {
+            throw new DatabaseError('Could not find user', 500, {
+                error: err,
+                tags: ['getPopulatedUser'],
+            });
+        }
+    }
 }
 
 const userService = new UserService();

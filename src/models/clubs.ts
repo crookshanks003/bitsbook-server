@@ -5,7 +5,7 @@ const clubSchema = new mongoose.Schema<Club>({
     name: String,
     userName: String,
     description: String,
-    password: String,
+    password: { type: String, select: false },
     createdAt: Date,
     members: [
         {
