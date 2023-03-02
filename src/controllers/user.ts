@@ -4,6 +4,14 @@ import { userService } from '../services';
 import { Normal } from '../utils/response';
 
 class UserController {
+    async getAllUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const users = await userService.getAllUsers();
+            res.status(200).json(Normal('All users', users));
+        } catch (error) {
+            next(error);
+        }
+    }
     async getUserDetails(req: Request, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
