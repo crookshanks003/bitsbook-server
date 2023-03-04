@@ -45,7 +45,7 @@ class AdminController {
                     tags: ['updateUserRole'],
                 });
             }
-            userService.updateUserRole(updateRoleDto);
+            await userService.updateUserRole(updateRoleDto);
             return res.status(200).json(Normal('User role updated', updateRoleDto));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };

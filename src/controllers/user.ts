@@ -7,6 +7,7 @@ class UserController {
     async getAllUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await userService.getAllUsers();
+            console.log(users);
             res.status(200).json(Normal('All users', users));
         } catch (error) {
             next(error);
