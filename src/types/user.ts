@@ -4,6 +4,7 @@ import { UserClub } from './club';
 export enum Role {
     ADIMIN = 'admin',
     USER = 'user',
+    CLUB = 'club',
 }
 
 export interface User extends Document {
