@@ -11,9 +11,10 @@ export interface User extends Document {
     _id: Types.ObjectId;
     name: string;
     email: string;
-    password: string;
+    password?: string;
     createdAt: Date;
     updatedAt: Date;
     role: Role;
     clubs: UserClub[];
+    version: number;
 }

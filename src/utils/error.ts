@@ -11,6 +11,7 @@ export enum AppErrorName {
     Database = 'Database',
     User = 'User',
     Auth = 'Auth',
+    Server = 'Server',
 }
 
 export class AppError extends Error {
@@ -55,6 +56,12 @@ export class UserError extends AppError {
 export class AuthorizationError extends AppError {
     constructor(message: string, statusCode: number, meta: ErrorMeta = { tags: [] }) {
         super(AppErrorName.Auth, message, statusCode, meta);
+    }
+}
+
+export class ServerError extends AppError {
+    constructor(message: string, meta: ErrorMeta = { tags: [] }) {
+        super(AppErrorName.Server, message, 500, meta);
     }
 }
 

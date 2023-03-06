@@ -70,6 +70,17 @@ class UserService {
         }
     }
 
+    async getUserForLogin(email: string) {
+        try {
+            return await UserModel.findOne({ email }).select('+password');
+        } catch (err) {
+            throw new DatabaseError('Could not find user', 500, {
+                error: err,
+                tags: ['getUserWithEmail'],
+            });
+        }
+    }
+
     async getUserWithId(id: string) {
         try {
             return await UserModel.findById(id);
