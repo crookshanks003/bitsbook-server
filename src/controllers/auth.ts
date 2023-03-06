@@ -7,7 +7,7 @@ class AuthController {
         try {
             const { role } = req.body;
             const token = role === 'admin' ? 'admin' : 'user';
-            res.status(200).cookie('token', token).json(Normal('logged in'));
+            res.status(200).cookie('token', token, { httpOnly: true }).json(Normal('logged in'));
         } catch (error) {
             next(error);
         }
