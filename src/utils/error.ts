@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 interface ErrorMeta {
     tags: string[];
     [key: string]: any;
@@ -7,6 +9,8 @@ export enum AppErrorName {
     App = 'App',
     Validation = 'Validation',
     Database = 'Database',
+    User = 'User',
+    Auth = 'Auth',
 }
 
 export class AppError extends Error {
@@ -41,3 +45,33 @@ export class DatabaseError extends AppError {
         super(AppErrorName.Database, message, statusCode, meta);
     }
 }
+
+export class UserError extends AppError {
+    constructor(message: string, statusCode: number, meta: ErrorMeta = { tags: [] }) {
+        super(AppErrorName.User, message, statusCode, meta);
+    }
+}
+
+export class AuthorizationError extends AppError {
+    constructor(message: string, statusCode: number, meta: ErrorMeta = { tags: [] }) {
+        super(AppErrorName.Auth, message, statusCode, meta);
+    }
+}
+
+process.on('unhandledRejection', (error) => {
+    logger.error('Unhandled Rejection', {
+        error,
+        tags: ['unhandled-rejection'],
+    });
+
+    process.exit(1);
+});
+
+process.on('uncaughtException', (error) => {
+    logger.error(error.name, {
+        error,
+        tags: ['uncaught-exception'],
+    });
+
+    process.exit(1);
+});

@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from 'express';
-import { AppError } from 'src/utils/error';
+import { AppError } from '../utils/error';
 import { logger } from '../utils/logger';
 import { Error } from '../utils/response';
 
