@@ -2,7 +2,7 @@ import { Types, Document } from 'mongoose';
 import { UserClub } from './club';
 
 export enum Role {
-    ADIMIN = 'admin',
+    ADMIN = 'admin',
     USER = 'user',
     CLUB = 'club',
 }

@@ -4,7 +4,7 @@ import { ServerError, UserError } from '../utils/error';
 import { userService } from './user';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { CreateUserDto } from 'src/types/dto/user';
+import { CreateUserDto } from '../types/dto/user';
 
 class AuthService {
     async login(email: string, password: string) {

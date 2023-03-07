@@ -6,6 +6,7 @@ import authService from '../services/auth';
 import { LoginDto } from '../types/dto/auth';
 import { Normal } from '../utils/response';
 import { Role } from '../types/user';
+import { IRequestWithUser } from '../types/';
 
 class AuthController {
     async login(req: Request, res: Response, next: NextFunction) {
@@ -39,9 +40,17 @@ class AuthController {
         }
     }
 
-    async getRole(req: Request, res: Response, next: NextFunction) {
+    async logOut(_: Request, res: Response, next: NextFunction) {
         try {
-            res.status(200).send(req.cookies.token || 'user');
+            res.clearCookie('token').status(200).json(Normal('Logged out'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getRole(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            res.status(200).send(req.user.role || Role.USER);
         } catch (error) {
             next(error);
         }
