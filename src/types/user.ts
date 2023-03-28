@@ -7,7 +7,7 @@ export enum Role {
     CLUB = 'club',
 }
 
-export interface User extends Document {
+interface BaseUser extends Document {
     _id: Types.ObjectId;
     name: string;
     email: string;
@@ -15,6 +15,27 @@ export interface User extends Document {
     createdAt: Date;
     updatedAt: Date;
     role: Role;
-    clubs: UserClub[];
     version: number;
+}
+
+export interface User extends BaseUser {
+    clubs: UserClub[];
+}
+
+export interface PopulatedClubForUser {
+    clubId: {
+        _id: string;
+        name: string;
+        userName: string;
+        description: string;
+        createdAt: Date;
+        __v: 0;
+    };
+    role: string;
+    createdAt: Date;
+    _id: string;
+}
+
+export interface PopulatedUser extends BaseUser {
+    clubs: PopulatedClubForUser[];
 }

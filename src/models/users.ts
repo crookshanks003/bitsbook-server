@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema<User>({
     clubs: [
         {
             clubId: { type: Schema.Types.ObjectId, ref: 'clubs' },
+            createdAt: Date,
             role: String,
         },
     ],

@@ -3,7 +3,7 @@ import { UserModel } from '../models';
 import { CreateUserDto, UpdateUserRoleDto } from '../types/dto/user';
 import bcrypt from 'bcrypt';
 import config from '../config';
-import { User } from '../types/user';
+import { PopulatedClubForUser, User } from '../types/user';
 
 class UserService {
     async deleteUser(id: string) {
@@ -94,7 +94,10 @@ class UserService {
 
     async getPopulatedUser(id: string) {
         try {
-            return await UserModel.findById(id).populate('clubs.clubId');
+            return await UserModel.findById(id).populate<{ clubs: PopulatedClubForUser[] }>({
+                path: 'clubs.clubId',
+                select: '-members',
+            });
         } catch (err) {
             throw new DatabaseError('Could not find user', 500, {
                 error: err,

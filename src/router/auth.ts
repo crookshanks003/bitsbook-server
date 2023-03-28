@@ -12,5 +12,6 @@ router.post('/register', validateBody(CreateUserDto), authController.register);
 router.post('/logout', authController.logOut);
 router.get('/get-role', authController.getRole);
 router.get('/profile', userController.getProfile);
+router.get('/populated-profile', userController.getProfileWithClubs);
 
 export default router;
