@@ -7,6 +7,7 @@ const clubSchema = new mongoose.Schema<Club>({
     description: String,
     password: { type: String, select: false },
     createdAt: Date,
+    version: { type: Number, default: 0 },
     members: [
         {
             userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },

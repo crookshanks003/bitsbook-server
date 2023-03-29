@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { User, Role } from '../types/user';
 
 const userSchema = new mongoose.Schema<User>({
+    version: { type: Number, default: 0 },
     name: String,
     email: String,
     password: { type: String, select: false },
@@ -10,10 +11,12 @@ const userSchema = new mongoose.Schema<User>({
     role: {
         type: String,
         enum: Role,
+        default: Role.USER,
     },
     clubs: [
         {
             clubId: { type: Schema.Types.ObjectId, ref: 'clubs' },
+            createdAt: Date,
             role: String,
         },
     ],

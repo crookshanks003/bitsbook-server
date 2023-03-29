@@ -100,6 +100,17 @@ class ClubService {
         }
     }
 
+    async getClubForLogin(userName: string) {
+        try {
+            return await ClubModel.findOne({ userName }).select('+password');
+        } catch (error) {
+            throw new DatabaseError('Could not find club', 500, {
+                error,
+                tags: ['getClubForLogin'],
+            });
+        }
+    }
+
     async getClubWithUserName(userName: string) {
         try {
             return await ClubModel.findOne({ userName });

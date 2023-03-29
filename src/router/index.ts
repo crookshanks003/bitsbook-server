@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { adminAuth } from '../middleware/adminAuth';
+import { adminAuth, auth } from '../middleware/auth';
 import adminRouter from './admin';
 import userRouter from './user';
 import clubRouter from './club';
@@ -8,10 +8,11 @@ import { AppError, AppErrorName } from '../utils/error';
 
 const router = Router();
 
+router.use('/auth', authRouter);
+router.use(auth);
 router.use('/admin', adminAuth, adminRouter);
 router.use('/user', userRouter);
 router.use('/club', clubRouter);
-router.use('/auth', authRouter);
 
 //404 for all invalid routes
 router.all('*', (req, _, next) => {
