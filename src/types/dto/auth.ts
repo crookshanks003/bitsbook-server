@@ -7,3 +7,11 @@ export class LoginDto {
     @IsString()
     password: string;
 }
+
+export class ClubLoginDto {
+    @IsString()
+    userName: string;
+
+    @IsString()
+    password: string;
+}

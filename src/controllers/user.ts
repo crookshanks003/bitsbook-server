@@ -3,6 +3,7 @@ import { UserError } from '../utils/error';
 import { userService } from '../services';
 import { Normal } from '../utils/response';
 import { IRequestWithUser } from '../types';
+import { Role } from '../types/user';
 
 class UserController {
     async getAllUsers(_: Request, res: Response, next: NextFunction) {
@@ -41,6 +42,14 @@ class UserController {
             const id = req.user.id;
             const user = await userService.getPopulatedUser(id);
             res.status(200).json(Normal('Populated user', user));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getRole(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            res.status(200).send(req.user.role || Role.USER);
         } catch (error) {
             next(error);
         }

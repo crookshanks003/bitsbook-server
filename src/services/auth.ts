@@ -5,6 +5,7 @@ import { userService } from './user';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { CreateUserDto } from '../types/dto/user';
+import { clubService } from './club';
 
 class AuthService {
     async login(email: string, password: string) {
@@ -29,6 +30,23 @@ class AuthService {
             const { email, role, version } = await userService.createUser(userDto);
             const token = this.getJwtToken(email, role, version);
             return { token, role };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async clubLogin(userName: string, password: string) {
+        try {
+            const club = await clubService.getClubForLogin(userName);
+            if (!club || !club.password) {
+                throw new UserError('Club does not exist', 400, { tags: ['clubLogin'] });
+            }
+            const match = this.matchPassword(password, club.password);
+            if (!match) {
+                throw new UserError('Incorrect password', 400, { tags: ['clubLogin'] });
+            }
+            const token = this.getJwtToken(club.id, Role.CLUB, club.version);
+            return { token, role: Role.CLUB };
         } catch (error) {
             throw error;
         }

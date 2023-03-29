@@ -8,11 +8,11 @@ import { AppError, AppErrorName } from '../utils/error';
 
 const router = Router();
 
+router.use('/auth', authRouter);
 router.use(auth);
 router.use('/admin', adminAuth, adminRouter);
 router.use('/user', userRouter);
 router.use('/club', clubRouter);
-router.use('/auth', authRouter);
 
 //404 for all invalid routes
 router.all('*', (req, _, next) => {

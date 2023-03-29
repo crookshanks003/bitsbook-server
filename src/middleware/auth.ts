@@ -21,7 +21,12 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
         const id: string = payload['id'];
         const user = await userService.getUserWithId(id);
         if (!user) {
-            next(new AuthorizationError('Not authorized', 401, { tags: ['auth'] }));
+            return next(new AuthorizationError('Not authorized', 401, { tags: ['auth'] }));
+        }
+        if (payload['version'] !== user.version) {
+            return next(
+                new AuthorizationError('Not authorized', 401, { tags: ['vesrionMismatch'] }),
+            );
         }
         req.user = user;
         next();

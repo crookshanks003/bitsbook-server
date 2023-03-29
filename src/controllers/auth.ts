@@ -3,10 +3,9 @@ import { userService } from '../services';
 import { CreateUserDto } from '../types/dto/user';
 import { UserError } from '../utils/error';
 import authService from '../services/auth';
-import { LoginDto } from '../types/dto/auth';
+import { ClubLoginDto, LoginDto } from '../types/dto/auth';
 import { Normal } from '../utils/response';
 import { Role } from '../types/user';
-import { IRequestWithUser } from '../types/';
 
 class AuthController {
     async login(req: Request, res: Response, next: NextFunction) {
@@ -40,17 +39,21 @@ class AuthController {
         }
     }
 
-    async logOut(_: Request, res: Response, next: NextFunction) {
+    async clubLogin(req: Request, res: Response, next: NextFunction) {
         try {
-            res.clearCookie('token').status(200).json(Normal('Logged out'));
+            const { userName, password }: ClubLoginDto = req.body;
+            const { token, role } = await authService.clubLogin(userName, password);
+            res.status(200)
+                .cookie('token', token, { httpOnly: true })
+                .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
         }
     }
 
-    async getRole(req: IRequestWithUser, res: Response, next: NextFunction) {
+    async logOut(_: Request, res: Response, next: NextFunction) {
         try {
-            res.status(200).send(req.user.role || Role.USER);
+            res.clearCookie('token').status(200).json(Normal('Logged out'));
         } catch (error) {
             next(error);
         }

@@ -14,8 +14,9 @@ export interface Club extends Document {
     _id: Types.ObjectId;
     name: string;
     userName: string;
-    password: string;
+    password?: string;
     description: string;
     createdAt: Date;
+    version: number;
     members: ClubUser[];
 }
