@@ -24,4 +24,4 @@ export async function execTransaction(...queries: Query<any, any>[]) {
 
 export * from './users';
 export * from './clubs';
-export * from './clubRoles';
+export * from './posts';

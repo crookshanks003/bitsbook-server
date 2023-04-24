@@ -39,7 +39,7 @@ class UserController {
 
     async getProfileWithClubs(req: IRequestWithUser, res: Response, next: NextFunction) {
         try {
-            const id = req.user.id;
+            const id = req.user._id;
             const user = await userService.getPopulatedUser(id);
             res.status(200).json(Normal('Populated user', user));
         } catch (error) {

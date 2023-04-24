@@ -19,6 +19,22 @@ class ClubService {
         }
     }
 
+    async getClubWithMembers(id: string) {
+        {
+            try {
+                return ClubModel.findById(id).populate({
+                    path: 'members.userId',
+                    select: '-clubs',
+                });
+            } catch (error) {
+                throw new DatabaseError('Could not find club', 500, {
+                    error,
+                    tags: ['getClubWithId'],
+                });
+            }
+        }
+    }
+
     async getAllClubs() {
         try {
             return await ClubModel.find();
