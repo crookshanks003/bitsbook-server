@@ -6,6 +6,7 @@ import { ClubModel, execTransaction, UserModel } from '../models';
 import { UpdateClubMemberDto } from '../types/dto/user';
 import config from '../config';
 import bcrypt from 'bcrypt';
+import { Types } from 'mongoose';
 
 class ClubService {
     async getClubWithId(id: string) {
@@ -16,6 +17,22 @@ class ClubService {
                 error,
                 tags: ['getClubWithId'],
             });
+        }
+    }
+
+    async getClubWithMembers(id: Types.ObjectId) {
+        {
+            try {
+                return ClubModel.findById(id).populate({
+                    path: 'members.userId',
+                    select: '-clubs',
+                });
+            } catch (error) {
+                throw new DatabaseError('Could not find club', 500, {
+                    error,
+                    tags: ['getClubWithId'],
+                });
+            }
         }
     }
 

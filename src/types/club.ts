@@ -1,4 +1,5 @@
 import { Types, Document } from 'mongoose';
+import { Role } from './user';
 
 export interface UserClub {
     clubId: string;
@@ -17,6 +18,8 @@ export interface Club extends Document {
     password?: string;
     description: string;
     createdAt: Date;
+    roles: string[];
     version: number;
     members: ClubUser[];
+    role: Role;
 }

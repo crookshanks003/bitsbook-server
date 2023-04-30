@@ -4,6 +4,7 @@ import { CreateUserDto, UpdateUserRoleDto } from '../types/dto/user';
 import bcrypt from 'bcrypt';
 import config from '../config';
 import { PopulatedClubForUser, User } from '../types/user';
+import { Types } from 'mongoose';
 
 class UserService {
     async deleteUser(id: string) {
@@ -84,15 +85,15 @@ class UserService {
     async getUserWithId(id: string) {
         try {
             return await UserModel.findById(id);
-        } catch (err) {
+        } catch (error) {
             throw new DatabaseError('Could not find user', 500, {
-                error: err,
+                error,
                 tags: ['getUserWithId'],
             });
         }
     }
 
-    async getPopulatedUser(id: string) {
+    async getPopulatedUser(id: Types.ObjectId) {
         try {
             return await UserModel.findById(id).populate<{ clubs: PopulatedClubForUser[] }>({
                 path: 'clubs.clubId',

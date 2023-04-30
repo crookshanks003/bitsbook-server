@@ -1,19 +1,39 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from '../services';
+import { clubService, userService } from '../services';
 import { CreateUserDto } from '../types/dto/user';
 import { UserError } from '../utils/error';
 import authService from '../services/auth';
 import { ClubLoginDto, LoginDto } from '../types/dto/auth';
 import { Normal } from '../utils/response';
 import { Role } from '../types/user';
+import { IRequestWithUser } from '../types';
 
 class AuthController {
+    async getProfile(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const profile =
+                req.user.role === Role.CLUB
+                    ? await clubService.getClubWithId(req.user._id.toString())
+                    : await userService.getUserWithId(req.user._id.toString());
+            const response = {
+                _id: profile._id,
+                role: profile.role,
+                createdAt: profile.createdAt,
+                name: profile.name,
+                version: profile.version,
+            };
+            res.status(200).json(Normal('profile', response));
+        } catch (error) {
+            next(error);
+        }
+    }
     async login(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password }: LoginDto = req.body;
             const { token, role } = await authService.login(email, password);
             res.status(200)
                 .cookie('token', token, { httpOnly: true })
+                .cookie('role', role)
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -45,6 +65,7 @@ class AuthController {
             const { token, role } = await authService.clubLogin(userName, password);
             res.status(200)
                 .cookie('token', token, { httpOnly: true })
+                .cookie('role', role)
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -53,10 +74,14 @@ class AuthController {
 
     async logOut(_: Request, res: Response, next: NextFunction) {
         try {
-            res.clearCookie('token').status(200).json(Normal('Logged out'));
+            res.clearCookie('token').clearCookie('role').status(200).json(Normal('Logged out'));
         } catch (error) {
             next(error);
         }
+    }
+
+    getRole(req: IRequestWithUser, res: Response) {
+        res.status(200).send(req.user.role);
     }
 }
 
