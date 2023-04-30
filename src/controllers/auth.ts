@@ -74,7 +74,7 @@ class AuthController {
 
     async logOut(_: Request, res: Response, next: NextFunction) {
         try {
-            res.clearCookie('token').clearCookie('token').status(200).json(Normal('Logged out'));
+            res.clearCookie('token').clearCookie('role').status(200).json(Normal('Logged out'));
         } catch (error) {
             next(error);
         }

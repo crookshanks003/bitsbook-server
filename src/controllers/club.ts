@@ -24,7 +24,7 @@ class ClubController {
 
     async getProfile(req: IRequestWithUser, res: Response, next: NextFunction) {
         try {
-            const club = await clubService.getClubWithMembers(req.user._id.toString());
+            const club = await clubService.getClubWithMembers(req.user._id);
             res.status(200).json(Normal('Club', club));
         } catch (error) {
             next(error);

@@ -85,9 +85,9 @@ class UserService {
     async getUserWithId(id: string) {
         try {
             return await UserModel.findById(id);
-        } catch (err) {
+        } catch (error) {
             throw new DatabaseError('Could not find user', 500, {
-                error: err,
+                error,
                 tags: ['getUserWithId'],
             });
         }

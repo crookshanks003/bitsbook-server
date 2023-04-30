@@ -6,6 +6,7 @@ import { ClubModel, execTransaction, UserModel } from '../models';
 import { UpdateClubMemberDto } from '../types/dto/user';
 import config from '../config';
 import bcrypt from 'bcrypt';
+import { Types } from 'mongoose';
 
 class ClubService {
     async getClubWithId(id: string) {
@@ -19,7 +20,7 @@ class ClubService {
         }
     }
 
-    async getClubWithMembers(id: string) {
+    async getClubWithMembers(id: Types.ObjectId) {
         {
             try {
                 return ClubModel.findById(id).populate({

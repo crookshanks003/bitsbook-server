@@ -6,6 +6,7 @@ import { CreatePostDto } from '../types/dto/post';
 
 const router = Router();
 
-router.post('/', clubAuth, validateBody(CreatePostDto), postController.createPost);
+router.post('/create', clubAuth, validateBody(CreatePostDto), postController.createPost);
+router.get('/all', postController.getPosts);
 
 export default router;

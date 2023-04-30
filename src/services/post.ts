@@ -18,6 +18,17 @@ class PostService {
             throw new DatabaseError('Could not create post', 500, { error, tags: ['createPost'] });
         }
     }
+
+    async getAllPosts() {
+        try {
+            return await PostModel.find({});
+        } catch (error) {
+            throw new DatabaseError('Could not get all posts', 500, {
+                error,
+                tags: ['getAllPosts'],
+            });
+        }
+    }
 }
 
 const postService = new PostService();

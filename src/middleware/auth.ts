@@ -39,6 +39,8 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
                 version: user.version,
                 createdAt: user.createdAt,
             };
+        } else {
+            return next(new AuthorizationError('Unknown Role', 401, { tags: ['unknownRole'] }));
         }
         if (payload['version'] !== req.user.version) {
             return next(
@@ -47,13 +49,13 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
         }
         next();
     } catch (error) {
-        return next(new AuthorizationError('Failed to authorize', 403, { error, tags: ['auth'] }));
+        next(new AuthorizationError('Failed to authorize', 403, { error, tags: ['auth'] }));
     }
 };
 
 export const adminAuth = async (req: IRequestWithUser, _: Response, next: NextFunction) => {
     if (!req.user || req.user.role !== Role.ADMIN) {
-        return next(new AuthorizationError('Not Authorized', 401, { tags: ['adminAuth'] }));
+        next(new AuthorizationError('Not Authorized', 401, { tags: ['adminAuth'] }));
     }
 
     next();

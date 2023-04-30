@@ -14,6 +14,15 @@ class PostsController {
             next(err);
         }
     }
+
+    async getPosts(_: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getAllPosts();
+            res.status(200).json(Normal('All posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 const postController = new PostsController();
