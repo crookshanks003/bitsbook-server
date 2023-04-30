@@ -26,8 +26,9 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
                 _id: user._id,
                 version: user.version,
                 createdAt: user.createdAt,
+                name: user.name,
             };
-        } else if (role === Role.USER) {
+        } else if (role === Role.USER || role === Role.ADMIN) {
             const user = await userService.getUserWithId(id);
             if (!user) {
                 return next(new AuthorizationError('Not authorized', 401, { tags: ['auth'] }));
@@ -38,6 +39,7 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
                 _id: user._id,
                 version: user.version,
                 createdAt: user.createdAt,
+                name: user.name,
             };
         } else {
             return next(new AuthorizationError('Unknown Role', 401, { tags: ['unknownRole'] }));

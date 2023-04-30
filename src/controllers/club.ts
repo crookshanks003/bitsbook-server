@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { IRequestWithUser } from 'src/types';
+import { IRequestWithUser } from '../types';
 import { clubService } from '../services';
 import { Normal } from '../utils/response';
 

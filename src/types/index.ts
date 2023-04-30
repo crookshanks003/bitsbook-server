@@ -7,6 +7,7 @@ interface RequestUser {
     role: Role;
     createdAt: Date;
     version: number;
+    name: string;
 }
 
 export interface IRequestWithUser extends Request {
