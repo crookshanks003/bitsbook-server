@@ -32,8 +32,8 @@ class AuthController {
             const { email, password }: LoginDto = req.body;
             const { token, role } = await authService.login(email, password);
             res.status(200)
-                .cookie('token', token, { httpOnly: true })
-                .cookie('role', role)
+                .cookie('token', token, { httpOnly: true, secure: true })
+                .cookie('role', role, { secure: true })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -52,7 +52,8 @@ class AuthController {
             userDto.role = Role.USER;
             const { token, role } = await authService.register(userDto);
             res.status(200)
-                .cookie('token', token, { httpOnly: true })
+                .cookie('token', token, { httpOnly: true, secure: true })
+                .cookie('role', token, { secure: true })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -64,8 +65,8 @@ class AuthController {
             const { userName, password }: ClubLoginDto = req.body;
             const { token, role } = await authService.clubLogin(userName, password);
             res.status(200)
-                .cookie('token', token, { httpOnly: true })
-                .cookie('role', role)
+                .cookie('token', token, { httpOnly: true, secure: true })
+                .cookie('role', role, { secure: true })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
