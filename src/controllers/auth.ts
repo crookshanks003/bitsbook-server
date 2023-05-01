@@ -36,12 +36,12 @@ class AuthController {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .cookie('role', role, {
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .json(Normal('logged in', { role }));
         } catch (error) {
@@ -65,12 +65,12 @@ class AuthController {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .cookie('role', role, {
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .json(Normal('logged in', { role }));
         } catch (error) {
@@ -87,12 +87,12 @@ class AuthController {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .cookie('role', role, {
                     secure: true,
                     sameSite: 'none',
-                    domain: 'bitsbook-server.onrender.com',
+                    domain: '.',
                 })
                 .json(Normal('logged in', { role }));
         } catch (error) {
