@@ -32,8 +32,17 @@ class AuthController {
             const { email, password }: LoginDto = req.body;
             const { token, role } = await authService.login(email, password);
             res.status(200)
-                .cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' })
-                .cookie('role', role, { secure: true, sameSite: 'none' })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -52,8 +61,17 @@ class AuthController {
             userDto.role = Role.USER;
             const { token, role } = await authService.register(userDto);
             res.status(200)
-                .cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' })
-                .cookie('role', role, { secure: true, sameSite: 'none' })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -65,8 +83,17 @@ class AuthController {
             const { userName, password }: ClubLoginDto = req.body;
             const { token, role } = await authService.clubLogin(userName, password);
             res.status(200)
-                .cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' })
-                .cookie('role', role, { secure: true, sameSite: 'none' })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-server.onrender.com',
+                })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
