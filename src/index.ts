@@ -8,7 +8,7 @@ function main() {
         .then(() => {
             console.log('Connected to mongoDB');
             const app = createApp();
-            app.listen(config.PORT, async () => {
+            app.listen(process.env.PORT || 5000, async () => {
                 console.log(`\nserver started on ${config.PORT}`);
             });
         })
