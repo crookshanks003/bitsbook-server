@@ -1,5 +1,5 @@
 import express from 'express';
-// import helmet from 'helmet';
+import helmet from 'helmet';
 import { httpLogger } from './middleware';
 import { globalErrorHandler } from './middleware/error';
 import router from './router';
@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 export function createApp() {
     const app = express();
 
-    // app.use(helmet());
+    app.use(helmet());
     app.use(cors({ origin: true, credentials: true }));
     app.use(cookieParser());
     app.use(express.json());
