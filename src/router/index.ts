@@ -11,10 +11,10 @@ const router = Router();
 
 router.use('/auth', authRouter);
 router.use(auth);
-router.use('/admin', adminAuth, adminRouter);
 router.use('/user', userRouter);
 router.use('/club', clubRouter);
 router.use('/post', postRouter);
+router.use('/admin', adminAuth, adminRouter);
 
 //404 for all invalid routes
 router.all('*', (req, _, next) => {

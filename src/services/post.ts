@@ -36,7 +36,12 @@ class PostService {
             return await PostModel.find({
                 author: { $in: clubs },
                 visibility: Visibility.PRIVATE,
-            }).lean();
+            })
+                .populate({
+                    path: 'author',
+                    select: 'name _id',
+                })
+                .lean();
         } catch (error) {
             throw new DatabaseError('Could not get feed post', 500, {
                 error,
@@ -63,10 +68,12 @@ class PostService {
 
     async getClubPosts(clubId: string) {
         try {
-            return await PostModel.find({ author: clubId }).populate({
-                path: 'author',
-                select: 'name _id',
-            });
+            return await PostModel.find({ author: clubId })
+                .populate({
+                    path: 'author',
+                    select: 'name _id',
+                })
+                .lean();
         } catch (error) {
             throw new DatabaseError('Could not get feed post', 500, {
                 error,
@@ -140,6 +147,22 @@ class PostService {
             throw new DatabaseError('Failed to delete post', 500, {
                 error,
                 tags: ['deletePost'],
+            });
+        }
+    }
+
+    async getInterestedPosts(userId: Types.ObjectId) {
+        try {
+            return await PostModel.find({ interested: userId })
+                .populate({
+                    path: 'author',
+                    select: 'name _id',
+                })
+                .lean();
+        } catch (error) {
+            throw new DatabaseError('Failed to get post', 500, {
+                error,
+                tags: ['getInterestedPosts'],
             });
         }
     }

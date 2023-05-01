@@ -35,7 +35,7 @@ export const auth = async (req: IRequestWithUser, _: Response, next: NextFunctio
             }
 
             req.user = {
-                role: Role.USER,
+                role: user.role,
                 _id: user._id,
                 version: user.version,
                 createdAt: user.createdAt,

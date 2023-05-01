@@ -10,8 +10,10 @@ router.post('/create', clubAuth, validateBody(CreatePostDto), postController.cre
 router.get('/all', postController.getPosts);
 router.get('/feed', postController.getFeedPosts);
 router.get('/club', clubAuth, postController.getClubPosts);
+router.get('/club-posts/:id', postController.getClubPostsById);
 router.get('/public', postController.getPublicPosts);
 router.post('/comment/:id', validateBody(AddCommentDto), postController.addComment);
+router.get('/interested', postController.getInterestedPosts);
 router.post('/interested/:id', postController.markInterested);
 router.post('/un-interested/:id', postController.markUnInterested);
 router.get('/likes/:id', postController.getPostInterested);

@@ -57,6 +57,19 @@ class PostsController {
         }
     }
 
+    async getClubPostsById(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getClubPosts(req.params['id']);
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Club Posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getPublicPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
         try {
             const posts = await postService.getPublicPosts();
@@ -110,6 +123,19 @@ class PostsController {
         try {
             const likes = await postService.getPostLikes(req.params['id']);
             res.status(200).json(Normal('Post likes', likes));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getInterestedPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getInterestedPosts(req.user._id);
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Interested Posts', posts));
         } catch (error) {
             next(error);
         }
