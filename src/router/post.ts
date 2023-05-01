@@ -14,6 +14,7 @@ router.get('/public', postController.getPublicPosts);
 router.post('/comment/:id', validateBody(AddCommentDto), postController.addComment);
 router.post('/interested/:id', postController.markInterested);
 router.post('/un-interested/:id', postController.markUnInterested);
+router.get('/likes/:id', postController.getPostInterested);
 router.delete('/:id', clubAuth, postController.deletePost);
 
 export default router;

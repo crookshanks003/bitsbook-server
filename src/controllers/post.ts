@@ -105,6 +105,15 @@ class PostsController {
             next(error);
         }
     }
+
+    async getPostInterested(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const likes = await postService.getPostLikes(req.params['id']);
+            res.status(200).json(Normal('Post likes', likes));
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 const postController = new PostsController();

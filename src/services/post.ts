@@ -130,6 +130,19 @@ class PostService {
             });
         }
     }
+
+    async getPostLikes(postId: string) {
+        try {
+            return await PostModel.findById(postId)
+                .select('interested')
+                .populate({ path: 'interested', select: 'name _id' });
+        } catch (error) {
+            throw new DatabaseError('Failed to delete post', 500, {
+                error,
+                tags: ['deletePost'],
+            });
+        }
+    }
 }
 
 const postService = new PostService();
