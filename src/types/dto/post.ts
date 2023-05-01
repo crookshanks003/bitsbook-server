@@ -11,3 +11,8 @@ export class CreatePostDto {
     @IsEnum(Visibility)
     visibility: Visibility;
 }
+
+export class AddCommentDto {
+    @IsString()
+    content: string;
+}
