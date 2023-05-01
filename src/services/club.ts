@@ -2,7 +2,7 @@ import { DatabaseError } from '../utils/error';
 import { Club } from '../types/club';
 import { CreateClubDto, UpdateClubDto } from '../types/dto/club';
 import { ClubUser, UserClub } from '../types/club';
-import { ClubModel, execTransaction, UserModel } from '../models';
+import { ClubModel, UserModel } from '../models';
 import { UpdateClubMemberDto } from '../types/dto/user';
 import config from '../config';
 import bcrypt from 'bcrypt';
@@ -89,13 +89,12 @@ class ClubService {
         }
     }
 
-    async addMemberToClub({ clubId, role, userId }: UpdateClubMemberDto) {
+    async addMemberToClub({ role, userId }: UpdateClubMemberDto, clubId: string) {
         try {
             const club: UserClub = { clubId, role };
-            const q1 = UserModel.updateOne({ _id: userId }, { $push: { clubs: club } });
+            await UserModel.updateOne({ _id: userId }, { $push: { clubs: club } });
             const clubMember: ClubUser = { userId, role };
-            const q2 = ClubModel.updateOne({ _id: clubId }, { $push: { members: clubMember } });
-            await execTransaction(q1, q2);
+            await ClubModel.updateOne({ _id: clubId }, { $push: { members: clubMember } });
         } catch (error) {
             throw new DatabaseError('Could not update user clubs', 500, {
                 error,
@@ -104,11 +103,10 @@ class ClubService {
         }
     }
 
-    async removeMemberFromClub({ clubId, userId }: UpdateClubMemberDto) {
+    async removeMemberFromClub({ userId }: UpdateClubMemberDto, clubId: string) {
         try {
-            const q1 = UserModel.updateOne({ _id: userId }, { $pull: { clubs: { clubId } } });
-            const q2 = ClubModel.updateOne({ _id: clubId }, { $pull: { members: { userId } } });
-            await execTransaction(q1, q2);
+            await UserModel.updateOne({ _id: userId }, { $pull: { clubs: { clubId } } });
+            await ClubModel.updateOne({ _id: clubId }, { $pull: { members: { userId } } });
         } catch (error) {
             throw new DatabaseError('Could not remove member from club', 500, {
                 error,

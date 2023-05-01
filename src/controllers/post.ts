@@ -47,8 +47,24 @@ class PostsController {
     async getClubPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
         try {
             const posts = await postService.getClubPosts(req.user._id.toString());
-            posts.forEach((p) => (p.liked = false));
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
             res.status(200).json(Normal('Feed Posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getPublicPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getPublicPosts();
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Public posts', posts));
         } catch (error) {
             next(error);
         }
@@ -76,6 +92,15 @@ class PostsController {
         try {
             await postService.addComment(req.params['id'], req.user._id, req.user.name, req.body);
             res.status(200).json(Normal('Comment added'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deletePost(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            await postService.deletePost(req.params['id']);
+            res.status(200).json(Normal('Post deleted'));
         } catch (error) {
             next(error);
         }

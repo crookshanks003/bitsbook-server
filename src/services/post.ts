@@ -119,6 +119,17 @@ class PostService {
             });
         }
     }
+
+    async deletePost(postId: string) {
+        try {
+            await PostModel.deleteOne({ _id: postId });
+        } catch (error) {
+            throw new DatabaseError('Failed to delete post', 500, {
+                error,
+                tags: ['deletePost'],
+            });
+        }
+    }
 }
 
 const postService = new PostService();
