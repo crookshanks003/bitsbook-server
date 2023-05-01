@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 export function createApp() {
     const app = express();
 
+    app.enable('trust proxy');
     app.use(helmet());
     app.use(cors({ origin: true, credentials: true }));
     app.use(cookieParser());
