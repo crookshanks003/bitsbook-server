@@ -33,8 +33,8 @@ export class UpdateClubMemberDto {
     userId: string;
 
     @IsString()
-    @IsNotEmpty()
-    clubId: string;
+    @IsOptional()
+    clubId?: string;
 
     @IsString()
     @IsOptional()

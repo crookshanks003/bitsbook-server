@@ -19,6 +19,7 @@ const clubSchema = new mongoose.Schema<Club>({
         {
             userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
             role: String,
+            createdAt: { type: Date, default: Date.now },
         },
     ],
 });

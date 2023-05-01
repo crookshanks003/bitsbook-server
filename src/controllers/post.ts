@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { userService } from '../services';
 import { postService } from '../services/post';
 import { IRequestWithUser } from '../types';
 import { CreatePostDto } from '../types/dto/post';
@@ -19,6 +20,122 @@ class PostsController {
         try {
             const posts = await postService.getAllPosts();
             res.status(200).json(Normal('All posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getFeedPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const user = await userService.getUserWithId(req.user._id.toString());
+            const clubs = user.clubs.map((cl) => cl.clubId);
+            const privatePosts = await postService.getPrivatePosts(clubs);
+            const publicPosts = await postService.getPublicPosts();
+            const posts = [...privatePosts, ...publicPosts];
+
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(user._id.toString());
+            });
+
+            res.status(200).json(Normal('Feed Posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getClubPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getClubPosts(req.user._id.toString());
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Feed Posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getClubPostsById(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getClubPosts(req.params['id']);
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Club Posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getPublicPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getPublicPosts();
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Public posts', posts));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async markInterested(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            await postService.markInterested(req.params['id'], req.user._id);
+            res.status(200).json(Normal('Marked Interested'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async markUnInterested(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            await postService.markUnInterested(req.params['id'], req.user._id);
+            res.status(200).json(Normal('Marked Uninterested'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async addComment(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            await postService.addComment(req.params['id'], req.user._id, req.user.name, req.body);
+            res.status(200).json(Normal('Comment added'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deletePost(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            await postService.deletePost(req.params['id']);
+            res.status(200).json(Normal('Post deleted'));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getPostInterested(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const likes = await postService.getPostLikes(req.params['id']);
+            res.status(200).json(Normal('Post likes', likes));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getInterestedPosts(req: IRequestWithUser, res: Response, next: NextFunction) {
+        try {
+            const posts = await postService.getInterestedPosts(req.user._id);
+            posts.forEach((p) => {
+                const interested = p.interested.map((id) => id.toString());
+                p.liked = interested.includes(req.user._id.toString());
+            });
+            res.status(200).json(Normal('Interested Posts', posts));
         } catch (error) {
             next(error);
         }

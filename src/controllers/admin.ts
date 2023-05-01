@@ -79,11 +79,11 @@ class AdminController {
                 });
             }
 
-            await clubService.addMemberToClub(dto);
+            await clubService.addMemberToClub(dto, dto.clubId);
             res.status(200).json(Normal('Updated clubs for user'));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };
-            error.meta.tags.push('admin');
+            error.meta.tags.push('club');
             next(error);
         }
     }
@@ -102,7 +102,7 @@ class AdminController {
             res.status(201).json(Normal('Club created', newClub));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };
-            error.meta.tags.push('admin');
+            error.meta.tags.push('club');
             next(error);
         }
     }
@@ -141,7 +141,7 @@ class AdminController {
                     tags: ['removeUserFromClub'],
                 });
             }
-            await clubService.removeMemberFromClub(dto);
+            await clubService.removeMemberFromClub(dto, dto.clubId);
             res.status(200).json(Normal('Removed member from club'));
         } catch (error) {
             if (!error.meta) error.meta = { tags: [] };
