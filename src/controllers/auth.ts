@@ -43,6 +43,17 @@ class AuthController {
                     sameSite: 'none',
                     domain: 'bitsbook-server.onrender.com',
                 })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
+                })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -72,6 +83,17 @@ class AuthController {
                     sameSite: 'none',
                     domain: 'bitsbook-server.onrender.com',
                 })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
+                })
                 .json(Normal('logged in', { role }));
         } catch (error) {
             next(error);
@@ -93,6 +115,17 @@ class AuthController {
                     secure: true,
                     sameSite: 'none',
                     domain: 'bitsbook-server.onrender.com',
+                })
+                .cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
+                })
+                .cookie('role', role, {
+                    secure: true,
+                    sameSite: 'none',
+                    domain: 'bitsbook-client.vercel.app',
                 })
                 .json(Normal('logged in', { role }));
         } catch (error) {
